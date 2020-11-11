@@ -1,29 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
     public float maxSpeed = 10;
     public float maxForce = 100;
-    public Vector3 velocity;
     public float interval = 0.2f;
+    public float agentRadius = 1f;
+    public float damping = 0.9f;
+    public Vector3 velocity;
     public Vector3 steeringForce;
     public Transform destination;
+
     private Vector3 acceleration;
     private float timer;
 
-    private List<SteeringBase> steerings;
+    private SteeringBase[] steerings;
 
     private void Start()
     {
         steeringForce = Vector3.zero;
         timer = 0f;
-        SteeringBase[] steeringComp = GetComponents<SteeringBase>();
-        foreach(SteeringBase sb in steeringComp)
-        {
-            steerings.Add(sb);
-        }
+        steerings = GetComponents<SteeringBase>();
+
     }
 
     private void Update()
@@ -44,18 +45,22 @@ public class Movement : MonoBehaviour
 
     private void CalculateSteering()
     {
-        foreach(SteeringBase sb in steerings)
+        steeringForce = Vector3.zero;
+        for(int i = 0; i < steerings.Length; i++)
         {
-            steeringForce += sb.Force();
+            steeringForce += steerings[i].Force();
         }
     }
 
     private void CalculateVelocity()
     {
+        acceleration = steeringForce;
         velocity += acceleration * Time.fixedDeltaTime;
         if (velocity.magnitude > maxSpeed)
             velocity = velocity.normalized * maxSpeed;
 
         transform.position += velocity * Time.fixedDeltaTime;
+        if(velocity.magnitude != 0)
+            transform.forward = velocity.normalized;
     }
 }

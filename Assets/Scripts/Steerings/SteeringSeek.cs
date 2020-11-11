@@ -5,9 +5,9 @@ using UnityEngine;
 public class SteeringSeek : SteeringBase
 {
     public GameObject target;
-    private Vector3 desiredVelocity;
-    private float maxSpeed;
-    private Movement agentMovement;
+    protected Vector3 desiredVelocity;
+    protected float maxSpeed;
+    protected Movement agentMovement;
 
     private void Start()
     {
