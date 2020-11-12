@@ -48,7 +48,7 @@ public class Movement : MonoBehaviour
         steeringForce = Vector3.zero;
         for(int i = 0; i < steerings.Length; i++)
         {
-            steeringForce += steerings[i].Force();
+            steeringForce += steerings[i].Force() * steerings[i].weight;
         }
     }
 
