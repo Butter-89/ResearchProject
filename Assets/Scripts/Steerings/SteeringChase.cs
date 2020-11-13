@@ -19,7 +19,9 @@ public class SteeringChase : SteeringBase
     {
         if(target.GetComponent<Movement>() == null)
             throw new System.Exception("Target chased does not have Movement script attached");
-        
+
+        if (target == null) return Vector3.zero;
+
         Vector3 toTarget = target.transform.position - transform.position;
         toTarget.y = 0f;
         float relativeDirection = Vector3.Dot(transform.forward, target.transform.forward);

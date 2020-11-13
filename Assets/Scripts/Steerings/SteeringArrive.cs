@@ -7,6 +7,7 @@ public class SteeringArrive : SteeringBase
     public float arrivalDistance = 0.3f;
     public float slowDownDistance;
     public GameObject target;
+    public Vector3 targetPosition;
     protected Vector3 desiredVelocity;
     protected float maxSpeed;
     protected Movement agentMovement;
@@ -19,7 +20,16 @@ public class SteeringArrive : SteeringBase
 
     public override Vector3 Force()
     {
-        Vector3 remaining = target.transform.position - transform.position;
+        //if (target == null && targetPosition == Vector3.zero) return Vector3.zero;  // need further look
+        //else
+        //{
+        //    targetPosition = target.transform.position;
+        //}
+
+        if(target != null)
+            targetPosition = target.transform.position;
+
+        Vector3 remaining = targetPosition - transform.position;
         remaining.y = 0f;
         float remainingDistance = remaining.magnitude;
         Vector3 forceReturned = Vector3.zero;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class CustomizedFormation : MonoBehaviour
 {
     // Pre-defined formation in prefab
-    public GameObject leader;
+    public GameObject target;
     public List<GameObject> members = new List<GameObject>();
     public float mobilityScale = 1;
 
@@ -13,19 +13,27 @@ public class CustomizedFormation : MonoBehaviour
 
     private void Start()
     {
-        leader = this.gameObject;
         Movement[] agentMovementComps = GetComponentsInChildren<Movement>();
         foreach(Movement agentMovement in agentMovementComps)
         {
             GameObject agent = agentMovement.transform.gameObject;
             members.Add(agent);
             Vector3 relativePosition = agent.transform.position - transform.position;
-
+            relativePositions.Add(relativePosition);
             if(agent.GetComponent<SteeringArrive>() == null)
                 agent.AddComponent<SteeringArrive>();
         }
+
+        
+        SetMemberDestination();
     }
 
-    
+    private void SetMemberDestination()
+    {
+        for(int i = 0; i < members.Count; i++)
+        {
+            members[i].GetComponent<SteeringArrive>().targetPosition = target.transform.position + relativePositions[i];
+        }
+    }
     
 }

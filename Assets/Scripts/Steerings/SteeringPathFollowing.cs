@@ -24,6 +24,9 @@ public class SteeringPathFollowing : SteeringArrive
 
     public override Vector3 Force()
     {
+        if (nodes.Count == 0)
+            return Vector3.zero;
+
         force = Vector3.zero;
         Vector3 toCurrentNode = target.transform.position - transform.position;
         toCurrentNode.y = 0;

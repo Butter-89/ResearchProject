@@ -18,6 +18,8 @@ public class SteeringFlee : SteeringBase
 
     public override Vector3 Force()
     {
+        if (target == null) return Vector3.zero;
+
         desiredVelocity = (transform.position - target.transform.position).normalized * maxSpeed;
         desiredVelocity.y = 0;
         if (Vector3.Distance(target.transform.position, transform.position) >= alertDistance)

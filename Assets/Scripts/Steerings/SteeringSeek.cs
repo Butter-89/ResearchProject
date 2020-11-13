@@ -17,6 +17,8 @@ public class SteeringSeek : SteeringBase
 
     public override Vector3 Force()
     {
+        if (target == null) return Vector3.zero;
+
         desiredVelocity = (target.transform.position - transform.position).normalized * maxSpeed;
         desiredVelocity.y = 0;
         return desiredVelocity - agentMovement.velocity;
