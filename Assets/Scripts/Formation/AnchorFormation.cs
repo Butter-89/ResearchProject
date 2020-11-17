@@ -6,7 +6,9 @@ public class AnchorFormation : MonoBehaviour
 {
     /*  Should be applied on a Squad object.
         Move the squad object and let the agents move towards the updatedposition    */
-
+    public bool loadData;
+    public FormationData formationData;
+    public float interval = 3;
     public List<GameObject> squadMembers = new List<GameObject>();
     private List<Vector3> positions = new List<Vector3>();    
     private List<GameObject> anchors = new List<GameObject>();
@@ -14,26 +16,34 @@ public class AnchorFormation : MonoBehaviour
     void Start()
     {
         Movement[] agentMovementComps = GetComponentsInChildren<Movement>();
-        foreach (GameObject agent in squadMembers)
+        for(int i = 0; i < squadMembers.Count; i++)
         {
+            GameObject agent = squadMembers[i];
             if (agent.GetComponent<SteeringArrive>() == null)
                 agent.AddComponent<SteeringArrive>();
 
+            agent.GetComponent<Movement>().UpdateSteerings();
             agent.GetComponent<SteeringArrive>().slowDownDistance = 4f;
             // TODO: Automatically generate the positions according to the formType
-            positions.Add(agent.transform.position - transform.position);   // origin as the anchor point
-            
+            if (!loadData)
+                positions.Add(agent.transform.position - transform.position);   // origin as the anchor point
+            else
+            {
+                positions.Add(formationData.positions[i] * interval);
+            }
+
             //agent.transform.parent = this.transform;
             GameObject anchor = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             anchor.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             anchor.transform.parent = this.transform;
             //anchor.transform.localPosition = Vector3.zero;
             anchor.transform.name = "GridPoint ";
-            anchor.transform.localPosition = transform.InverseTransformPoint(agent.transform.position);
+            if(!loadData)
+                anchor.transform.localPosition = transform.InverseTransformPoint(agent.transform.position);
+            else
+                anchor.transform.localPosition = positions[i];
 
             anchors.Add(anchor);
-
-            //agent.transform.parent = null;
         }
     }
 

@@ -63,4 +63,9 @@ public class Movement : MonoBehaviour
         if(velocity.magnitude != 0)
             transform.forward = velocity.normalized;
     }
+
+    public void UpdateSteerings()
+    {
+        steerings = GetComponents<SteeringBase>();
+    }
 }
